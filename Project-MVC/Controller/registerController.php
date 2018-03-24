@@ -10,15 +10,19 @@ if(isset($_POST["register"])) {
     $email = htmlentities($_POST["email"]);
     $username = htmlentities($_POST["username"]);
     $password = htmlentities($_POST["password1"]);  //две пароли ли ще имаме при регистрация??
-    $regErr = [];
-    if (empty($email) || empty($username) || empty($pass1)) {
-        $regErr[] = "All fields must be filled";
+
+    if (empty($email) || empty($username) || empty($password)) {
+        $error = "All fields must be filled";
     }
     if (mb_strlen($username) < 2){
-        $regErr[] = "Min length for user  name  is  2 chars!";
+        $error = "Min length for user  name  is  2 chars!";
     }
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
-        $regErr[] = "Invalid  Email!";
+        $error = "Invalid  Email!";
+    }
+    if (isset($error) && $error) { // $error e от  if (isset($_POST["register"]) този иф, ако е сетната и е true да изпишем ГРЕШКА
+        echo "<h1>$error</h1>";    //и да си остане пак на регистър, докато се регистрира правилно
+        //require_once "../View/register.html";
     }
     try {
         if (registerUser($username, $email, sha1($password))) {
@@ -29,5 +33,6 @@ if(isset($_POST["register"])) {
     }
     catch (PDOException $e){
         require_once "../View/error.html";
+        print_r($e);
     }
 }

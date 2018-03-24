@@ -15,4 +15,5 @@ try {
 }
 catch (PDOException $e){
     echo "Problem with db query  - " . $e->getMessage();
+    print_r( $e ); // да го изтрия като си реша проблема
 }
